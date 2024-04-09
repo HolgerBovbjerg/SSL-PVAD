@@ -1,0 +1,109 @@
+exp:
+    wandb: True
+    wandb_api_key:
+    proj_name: PVAD_SSL
+    exp_dir: ./runs
+    exp_name: LSTM_D64L2_DenoisingAPC_pretrain_960h_noisy_no_cafe
+    group_name: LSTM_D64L2_DenoisingAPC_pretrain_960h_noisy_no_cafe
+    device: auto
+    log_freq: 20    # log every l_f steps
+    log_to_file: True
+    log_to_stdout: False
+    val_freq: 1    # validate every v_f epochs
+    n_workers: 16
+    pin_memory: True
+data:
+    train_data:
+        LibriSpeech:
+            root: /users/bovbjerg/Data/LibriSpeech/
+            splits:
+                - train-clean-100
+                - train-clean-360
+                - train-other-500
+    validation_data:
+        LibriSpeech:
+            root: /users/bovbjerg/Data/LibriSpeech/
+            splits:
+                - dev-clean
+    test_data:
+        LibriSpeech:
+            root: /users/bovbjerg/Data/LibriSpeech/
+            splits:
+                - test-clean
+    buffer_size: 10000
+    load_from: raw
+    load_from_tar: True
+    segment_max_size: 0
+    max_token_count: 60000
+    min_length: 50
+hparams:
+    seed: 0
+    n_epochs: 10
+    batch_size: 1
+    audio:
+        sample_rate: 16000
+        n_mels: 40
+        n_fft: 400
+        window_length: 400
+        hop_length: 160
+        stacked_consecutive_features: 1
+        subsample_factor: 1
+    model:
+        input_dim: 40
+        hidden_dim: 64
+        input_projection: False
+        input_dropout: 0.
+        encoder:
+            name: LSTMEncoder
+            settings:
+                input_dim: 40
+                hidden_dim: 64
+                projection_size: 0
+                num_layers: 2
+        apc:
+            time_shift: 3
+    loss:
+        type: l1loss
+        accumulation_steps: 1
+    optimizer:
+        opt_type: AdamW
+        opt_kwargs:
+            lr: 0.001
+            weight_decay: 0.01
+            betas: !!python/tuple [0.9, 0.999]
+            eps: 1.e-8
+        clip_grad_norm: 1.0
+    scheduler:
+        scheduler_type: cosine_annealing_warmup_restarts
+        scheduler_kwargs:
+            first_cycle_steps: 30000
+            cycle_mult: 0.9
+            max_lr: 0.001 # 0.05/sqrt(d)
+            min_lr: 0.000001
+            warmup_steps: 1000
+            gamma: 0.5
+            last_epoch: -1
+        steps_per_epoch: 1
+    augment:
+        waveform:
+            rir:
+                rir_paths:
+                    - /flash/project_465000676/Data/RIRS_NOISES/
+                p: 0.5
+            noise:
+                noise_paths:
+                    - /flash/project_465000676/Data/kolbaek_noise_files/bbl/
+                    - /flash/project_465000676/Data/kolbaek_noise_files/bus/
+                    - /flash/project_465000676/Data/kolbaek_noise_files/ped/
+                    - /flash/project_465000676/Data/kolbaek_noise_files/ssn/
+                    - /flash/project_465000676/Data/kolbaek_noise_files/str/
+                snr_db_min: -5
+                snr_db_max: 20
+                p: 0.5
+        spectrogram:
+#            spec_aug:
+#                time_mask_max_length: 25
+#                n_time_mask: 2
+#                p_max: 1.0
+#                freq_mask_max_length: 7
+#                n_freq_mask: 2

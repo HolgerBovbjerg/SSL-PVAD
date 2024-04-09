@@ -1,0 +1,33 @@
+data:
+    librispeech_root: data/LibriSpeech/
+    alignments_root: data/LibriSpeech-Alignments/
+    data_root: data/LibriSpeechConcat/
+    waveforms_dir: Waveforms/
+    features_dir: Features/
+    embeddings_dir: SpeakerEmbeddings/
+    name: librispeech_concat
+    train_splits:
+#        - train-other-500
+#        - train-clean-360
+        - train-clean-100
+    validation_splits:
+        - dev-clean
+        - dev-other
+    test_splits:
+        - test-clean
+        - test-other
+    labels:
+        ns: 0
+        tss: 1
+        ntss: 2
+
+hparams:
+    seed: 0
+    audio:
+        sample_rate: 16000
+        n_mels: 40
+        n_fft: 400
+        window_length: 400
+        hop_length: 160
+        stacked_consecutive_features: 1
+        stacked_features_stride: 1

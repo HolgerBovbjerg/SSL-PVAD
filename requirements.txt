@@ -1,0 +1,17 @@
+numpy>=1.23.5
+PyYAML>=6.0
+librosa>=0.10
+Resemblyzer>=0.1.1.dev0
+torch>=1.13.1
+torchaudio>=0.13.1
+tqdm>=4.65.0
+wandb>=0.14.0
+torchmetrics>=0.11.4
+typing>=3.7.4.3
+speechbrain~=0.5.13
+transformers>=4.29.0
+pandas>=1.5.3
+torch-audiomentations>=0.11.0
+scikit-learn>=1.2.2
+torchdata>=0.6.1
+matplotlib>=3.7.1
