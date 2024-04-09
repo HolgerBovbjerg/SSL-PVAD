@@ -5,7 +5,6 @@ from torch import nn
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
 
-
 class PVAD1_SC(nn.Module):
     """Personal VAD model class. """
 

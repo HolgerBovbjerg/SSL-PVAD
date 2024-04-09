@@ -2,9 +2,9 @@ from typing import Optional, Union
 
 import torch
 import torchaudio
-from torchaudio.transforms import TimeStretch, TimeMasking, FrequencyMasking
-from torch_audiomentations import AddBackgroundNoise, ApplyImpulseResponse, Compose
-
+from torch_audiomentations import (AddBackgroundNoise, ApplyImpulseResponse,
+                                   Compose)
+from torchaudio.transforms import FrequencyMasking, TimeMasking, TimeStretch
 
 
 class SpecAugment(torch.nn.Module):

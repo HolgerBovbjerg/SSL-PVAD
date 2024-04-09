@@ -1,19 +1,19 @@
 import os
+import random
 import time
 from typing import Callable, Tuple
-import random
 
+import numpy as np
 import torch
+import wandb
+from sklearn.metrics import (average_precision_score, confusion_matrix,
+                             roc_auc_score)
 from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import wandb
 
-import numpy as np
-from sklearn.metrics import confusion_matrix, average_precision_score, roc_auc_score
-
-from common.misc import log, save_model
 from common.metrics import wandb_log_confusion_matrix
+from common.misc import log, save_model
 
 
 def train_single_batch(model: nn.Module, features: torch.Tensor, targets: torch.Tensor,

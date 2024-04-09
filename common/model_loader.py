@@ -1,8 +1,8 @@
 import torch.nn
 
-from models.PVAD1_et import PVAD1ET, PVAD1ET2, PVAD1ET22, PVAD1ET3, PVAD1ET4
-from models.PVAD1_sc import PVAD1_SC
 from models.modules.LSTMEncoder import LSTMEncoder, LSTMEncoder2
+from models.PVAD1_et import PVAD1ET, PVAD1ET2, PVAD1ET3, PVAD1ET4, PVAD1ET22
+from models.PVAD1_sc import PVAD1_SC
 
 
 def get_model(model_config, **kwargs):

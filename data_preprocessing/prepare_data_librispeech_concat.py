@@ -1,22 +1,21 @@
-from argparse import ArgumentParser
 import math
-from pathlib import Path
-from glob import glob
 import random
 import re
-import yaml
+from argparse import ArgumentParser
+from glob import glob
+from pathlib import Path
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import torch
 import torchaudio
+import yaml
 from torchaudio.datasets import LIBRISPEECH
 from tqdm import tqdm
 
-from common.augment import AddRIR, AddNoise
-from common.config_parser import get_config
-from common.misc import seed_everything
+from common.augment import AddNoise, AddRIR
 from common.feature_extraction import LogMelFeatureExtractor
+from common.misc import seed_everything
 from common.speaker_embedding import generate_embeddings
 
 

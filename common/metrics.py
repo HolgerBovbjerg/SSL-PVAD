@@ -1,14 +1,13 @@
-from typing import Optional, Union
 from operator import itemgetter
+from typing import Optional, Union
 
-from sklearn.metrics import roc_curve
-from scipy.optimize import brentq
-from scipy.interpolate import interp1d
 import numpy as np
-from sklearn.metrics import ConfusionMatrixDisplay
 import torch
-from tqdm import tqdm
 import wandb
+from scipy.interpolate import interp1d
+from scipy.optimize import brentq
+from sklearn.metrics import ConfusionMatrixDisplay, roc_curve
+from tqdm import tqdm
 
 
 def wandb_log_confusion_matrix(counts: np.ndarray, class_names, title: str = ""):

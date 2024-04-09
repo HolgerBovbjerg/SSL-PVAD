@@ -1,9 +1,9 @@
 import math
+from typing import Optional
 
 import torch
 from torch import optim
 from torch.optim import lr_scheduler
-from typing import Optional
 
 
 class WarmUpLR(lr_scheduler._LRScheduler):

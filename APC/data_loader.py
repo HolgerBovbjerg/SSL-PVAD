@@ -1,14 +1,14 @@
-from pathlib import Path
-from functools import partial
-from typing import Optional, Tuple, Callable, Union
-from io import BytesIO
 import random
+from functools import partial
+from io import BytesIO
 from math import ceil
+from pathlib import Path
+from typing import Callable, Optional, Tuple, Union
 
 import torch
-from torch.utils.data import DataLoader
-from torch.nn.utils.rnn import pad_sequence
 import torchaudio
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import DataLoader
 from torchdata import datapipes as dp
 
 

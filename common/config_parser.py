@@ -1,6 +1,7 @@
-import yaml
 import os
+
 import torch
+import yaml
 
 
 def get_config(config_file: str) -> dict:

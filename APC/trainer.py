@@ -1,14 +1,14 @@
-from typing import Callable
 import os
 import time
+from typing import Callable
 
 import torch
-from torch.utils.data import DataLoader
 from torch import nn, optim
-from APC import APC
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from common.misc import save_model, log
+from APC import APC
+from common.misc import log, save_model
 
 
 def train_single_batch(model: nn.Module, features: torch.Tensor, lengths: torch.Tensor,

@@ -1,22 +1,22 @@
-from pathlib import Path
 from functools import partial
-from typing import Tuple, Callable, Optional
 from io import BytesIO
+from pathlib import Path
+from typing import Callable, Optional, Tuple
 
-from librosa.feature import melspectrogram
-import pandas as pd
 import numpy as np
+import pandas as pd
 import torch
-from torch import Tensor
-from torch.utils.data import Dataset, DataLoader, ConcatDataset
-from torch.nn.utils.rnn import pad_sequence
 import torchaudio
-from torchdata import datapipes as dp
+from librosa.feature import melspectrogram
 from resemblyzer import VoiceEncoder
+from torch import Tensor
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import ConcatDataset, DataLoader, Dataset
+from torchdata import datapipes as dp
 
-from common.misc import nearest_interp
-from data_preprocessing.prepare_data_librispeech_concat import interpolate_labels
-from common.misc import count_files
+from common.misc import count_files, nearest_interp
+from data_preprocessing.prepare_data_librispeech_concat import \
+    interpolate_labels
 
 implemented_data_sets = ["librispeech_concat"]
 

@@ -1,14 +1,14 @@
 import os
-from pathlib import Path
-from glob import glob
 import random
+from glob import glob
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import torch
 import torchaudio
-from tqdm import tqdm
 from resemblyzer import VoiceEncoder, preprocess_wav
+from tqdm import tqdm
 
 
 def generate_speaker_embedding(speaker, speaker_encoder, minimum_duration: float = 5.):

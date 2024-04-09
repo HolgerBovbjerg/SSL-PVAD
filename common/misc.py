@@ -2,12 +2,12 @@ import os
 import random
 from typing import Optional
 
-import torch
-from torch import nn, optim
 import numpy as np
+import torch
 import wandb
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
+from torch import nn, optim
 
 
 def freeze_model_parameters(model: nn.Module):

@@ -1,6 +1,7 @@
+from typing import List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
-from typing import Optional, Tuple, Union, List
 from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
 
 
