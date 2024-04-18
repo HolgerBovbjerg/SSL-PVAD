@@ -15,31 +15,31 @@ exp:
 data:
     train_data:
         LibriSpeech:
-            root: /users/bovbjerg/Data/LibriSpeech/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - train-clean-100
                 - train-clean-360
                 - train-other-500
     validation_data:
         LibriSpeech:
-            root: /users/bovbjerg/Data/LibriSpeech/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - dev-clean
     test_data:
         LibriSpeech:
-            root: /users/bovbjerg/Data/LibriSpeech/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - test-clean
     buffer_size: 10000
     load_from: raw
-    load_from_tar: True
+    load_from_tar: False
     segment_max_size: 0
-    max_token_count: 60000
-    min_length: 50
+    max_token_count: 0
+    min_length: 0
 hparams:
     seed: 0
     n_epochs: 10
-    batch_size: 1
+    batch_size: 16
     audio:
         sample_rate: 16000
         n_mels: 40
@@ -47,7 +47,7 @@ hparams:
         window_length: 400
         hop_length: 160
         stacked_consecutive_features: 1
-        subsample_factor: 1
+        stacked_features_stride: 1
     model:
         input_dim: 40
         hidden_dim: 64
@@ -88,15 +88,15 @@ hparams:
         waveform:
             rir:
                 rir_paths:
-                    - /flash/project_465000676/Data/RIRS_NOISES/
+                    - ./data/rirs_noises/
                 p: 0.5
             noise:
                 noise_paths:
-                    - /flash/project_465000676/Data/kolbaek_noise_files/bbl/
-                    - /flash/project_465000676/Data/kolbaek_noise_files/bus/
-                    - /flash/project_465000676/Data/kolbaek_noise_files/ped/
-                    - /flash/project_465000676/Data/kolbaek_noise_files/ssn/
-                    - /flash/project_465000676/Data/kolbaek_noise_files/str/
+                    - ./data/kolbaek_noise_files/bbl/
+                    - ./data/kolbaek_noise_files/bus/
+                    - ./data/kolbaek_noise_files/ped/
+                    - ./data/kolbaek_noise_files/ssn/
+                    - ./data/kolbaek_noise_files/str/
                 snr_db_min: -5
                 snr_db_max: 20
                 p: 0.5

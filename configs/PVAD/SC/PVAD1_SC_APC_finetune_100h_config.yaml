@@ -1,0 +1,98 @@
+exp:
+    wandb: True
+    wandb_api_key:
+    proj_name: PVAD_SSL
+    exp_dir: ./runs
+    exp_name: PVAD1_SC_APC_finetune_100h
+    group_name: PVAD1_SC_APC_finetune_100h
+    device: auto
+    log_freq: 20    # log every l_f steps
+    log_to_file: True
+    log_to_stdout: True
+    val_freq: 1    # validate every v_f epochs
+    n_workers: 16
+    pin_memory: True
+data:
+    train_data:
+        LibriSpeechConcat:
+            root: ./data/LibriSpeechConcat/
+            splits:
+                - train-clean-100
+    validation_data:
+        LibriSpeechConcat:
+            root: ./data/LibriSpeechConcat/
+            splits:
+                - dev-clean
+    test_data:
+        LibriSpeechConcat:
+            root: ./data/LibriSpeechConcat/
+            splits:
+                - test-clean
+    waveforms_dir: Waveforms/
+    embeddings_dir: SpeakerEmbeddings/
+    buffer_size: 10000
+    load_from_tar: False
+    load_from: raw
+    segment_max_size: 0
+    max_token_count: 0
+    min_length: 0
+    p_enrollment_free: 0.0
+    p_target_free: 0.0
+    labels:
+        ns: 0
+        tss: 1
+        ntss: 2
+    use_waveforms: True
+hparams:
+    seed: 0
+    batch_size: 64
+    n_epochs: 10
+    audio:
+        sample_rate: 16000
+        n_mels: 40
+        n_fft: 400
+        window_length: 400
+        hop_length: 160
+        stacked_consecutive_features: 1
+        stacked_features_stride: 1
+    model:
+        encoder:
+            name: PVAD1_SC
+            settings:
+                input_dim: 40
+                hidden_dim: 64
+                num_layers: 2
+                out_dim: 2
+        checkpoint:
+            checkpoint_path: ./pretrained_models/APC/LSTM_L2H64_APC_pretrain_960h/best_encoder.pth
+        freeze_encoder: False
+    loss:
+        type: cross_entropy
+        accumulation_steps: 1
+        weights:
+            tss_ns: 1
+            tss_ntss: 1
+            ns_ntss: 0.1
+    optimizer:
+        opt_type: AdamW
+        opt_kwargs:
+          lr: 0.001
+          weight_decay: 0.0
+          betas: !!python/tuple [0.9, 0.999]
+          eps: 1.e-8
+    scheduler:
+        scheduler_type: cosine_annealing_warmup_restarts
+        scheduler_kwargs:
+            first_cycle_steps: 5000
+            cycle_mult: 0.9
+            max_lr: 0.001 # 0.05/sqrt(d)
+            min_lr: 0.000001
+            warmup_steps: 1000
+            gamma: 0.5
+            last_epoch: -1
+        steps_per_epoch: 1
+    augment:
+        waveform:
+        spectrogram:
+
+

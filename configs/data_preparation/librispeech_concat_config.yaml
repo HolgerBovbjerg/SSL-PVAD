@@ -20,9 +20,8 @@ data:
         ns: 0
         tss: 1
         ntss: 2
-
 hparams:
-    seed: 0
+    seed: 42
     audio:
         sample_rate: 16000
         n_mels: 40

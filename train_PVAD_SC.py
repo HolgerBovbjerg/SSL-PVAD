@@ -1,23 +1,24 @@
-from argparse import ArgumentParser
 import os
 import time
+from argparse import ArgumentParser
 from math import ceil
 
-import yaml
 import torch
+import yaml
 import wandb
 
-from common.config_parser import get_config
 from common.augment import SpecAugment, get_composed_augmentations
-from PVAD.data_loader_SC import build_libriconcat_datapipe, pad_collate
+from common.config_parser import get_config
 from common.feature_extraction import LogMelFeatureExtractor
 from common.loss import get_loss
 from common.metrics import wandb_log_confusion_matrix
-from common.misc import seed_everything, count_parameters, log, freeze_model_parameters
+from common.misc import (count_parameters, freeze_model_parameters, log,
+                         seed_everything)
 from common.model_loader import get_model, load_pretrained_encoder
 from common.optimizer import get_optimizer
 from common.scheduler import get_scheduler
-from PVAD.trainer_PVAD_SC import train, evaluate
+from PVAD.data_loader_SC import build_libriconcat_datapipe, pad_collate
+from PVAD.trainer_PVAD_SC import evaluate, train
 
 
 def training_pipeline(config):
@@ -37,12 +38,12 @@ def training_pipeline(config):
 
     # feature extractor
     feature_extractor = None
-    if config["data"]["use_waveforms"]:
+    if config["data"]["load_from"] in ["raw", "decoded"]:
         feature_extractor = LogMelFeatureExtractor(**config["hparams"]["audio"])
 
     # Augmentor
     wav_augmentor = None
-    if config["hparams"]["augment"]["waveform"]:
+    if config["hparams"]["augment"]["waveform"] and config["data"]["load_from"] in ["raw", "decoded"]:
         wav_augmentor = get_composed_augmentations(config["hparams"]["augment"]["waveform"])
 
     # augmentation during training
@@ -149,7 +150,7 @@ def training_pipeline(config):
     print("Initiating training.")
 
     step = train(model=model, optimizer=optimizer, criterion=criterion, scheduler=scheduler, train_loader=train_loader,
-          validation_loader=validation_loader, augmentor=spec_augmentor, config=config)
+                 validation_loader=validation_loader, augmentor=spec_augmentor, config=config)
 
     print("Finished training.\n")
 

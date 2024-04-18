@@ -1,0 +1,80 @@
+data:
+  alignments_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech-Alignments/
+  concat_waveforms_dir: Waveforms/
+  data_root: /home/es.aau.dk/jg96xg/Data/LibriSpeechConcat/
+  embeddings_dir: SpeakerEmbeddings/
+  features_dir: Features/
+  labels:
+    ns: 0
+    ntss: 2
+    tss: 1
+  librispeech_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech/
+  name: librispeech_concat
+  test_splits:
+  - test-clean
+  train_splits:
+  - train-clean-100
+  - train-clean-360
+  - train-other-500
+  use_waveforms: true
+  validation_splits:
+  - dev-clean
+exp:
+  device: !!python/object/apply:torch.device
+  - cuda
+  exp_dir: ./runs
+  exp_name: PVAD1_SC_APC_pretrain_960h_100175
+  group_name: PVAD1_SC_APC_pretrain_960h
+  log_freq: 1
+  log_to_file: true
+  log_to_stdout: false
+  n_workers: 16
+  pin_memory: false
+  proj_name: PVAD_SSL
+  save_dir: ./runs/PVAD1_SC_APC_pretrain_960h_100175
+  val_freq: 1
+  wandb: true
+  wandb_api_key: null
+hparams:
+  audio:
+    hop_length: 160
+    n_fft: 400
+    n_mels: 40
+    sample_rate: 16000
+    stacked_consecutive_features: 1
+    subsample_factor: 1
+    window_length: 400
+  augment:
+    spectrogram: null
+    waveform: null
+  batch_size: 32
+  loss:
+    type: l1loss
+  model:
+    apc:
+      time_shift: 3
+    encoder:
+      name: LSTMEncoder
+      settings:
+        dropout: 0.0
+        hidden_dim: 64
+        input_dim: 40
+        num_layers: 2
+    hidden_dim: 64
+    input_dim: 40
+  n_epochs: 10
+  optimizer:
+    opt_kwargs:
+      betas: !!python/tuple
+      - 0.9
+      - 0.999
+      eps: 1.0e-08
+      lr: 0.001
+      weight_decay: 0.001
+    opt_type: Adam
+  scheduler:
+    n_warmup: 0
+    scheduler_kwargs:
+      max_lr: 0.001
+    scheduler_type: 1cycle
+  seed: 0

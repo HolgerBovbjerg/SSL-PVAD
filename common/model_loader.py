@@ -1,8 +1,8 @@
 import torch.nn
 
-from models.modules.LSTMEncoder import LSTMEncoder, LSTMEncoder2
-from models.PVAD1_et import PVAD1ET, PVAD1ET2, PVAD1ET3, PVAD1ET4, PVAD1ET22
-from models.PVAD1_sc import PVAD1_SC
+from network_modules.LSTMEncoder import LSTMEncoder, LSTMEncoder2
+from PVAD import (PVAD1_SC, PVAD1ET, PVAD1ET2, PVAD1ET3, PVAD1ET4,
+                  PVAD1ET22)
 
 
 def get_model(model_config, **kwargs):
@@ -44,6 +44,9 @@ def load_pretrained_encoder(model: torch.nn.Module, checkpoint_path: str = "", m
     checkpoint = torch.load(checkpoint_path, map_location=map_location)
     model_state_dict = model.encoder.state_dict()
     checkpoint_model_state_dict = checkpoint["model_state_dict"]
+    if "lstm.weight_ih_l0" in checkpoint_model_state_dict:
+        checkpoint_model_state_dict = {key.replace("lstm.", ""): value
+                                       for key, value in checkpoint_model_state_dict.items()}
     model_state_dict.update(checkpoint_model_state_dict)
 
     model.encoder.load_state_dict(model_state_dict)

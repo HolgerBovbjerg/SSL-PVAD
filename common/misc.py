@@ -4,10 +4,11 @@ from typing import Optional
 
 import numpy as np
 import torch
-import wandb
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from torch import nn, optim
+
+import wandb
 
 
 def freeze_model_parameters(model: nn.Module):

@@ -1,7 +1,7 @@
 from functools import partial
 from io import BytesIO
 from pathlib import Path
-from typing import Callable, Optional, Tuple
+from typing import Callable
 
 import numpy as np
 import pandas as pd
@@ -9,12 +9,11 @@ import torch
 import torchaudio
 from librosa.feature import melspectrogram
 from resemblyzer import VoiceEncoder
-from torch import Tensor
 from torch.nn.utils.rnn import pad_sequence
-from torch.utils.data import ConcatDataset, DataLoader, Dataset
+from torch.utils.data import DataLoader
 from torchdata import datapipes as dp
 
-from common.misc import count_files, nearest_interp
+from common.misc import count_files
 from data_preprocessing.prepare_data_librispeech_concat import \
     interpolate_labels
 
@@ -196,9 +195,13 @@ def pad_collate(batch):
 
     features_padded = pad_sequence(features, batch_first=True, padding_value=0)
     labels_padded = pad_sequence(labels, batch_first=True, padding_value=-1)
-    similarity_padded = pad_sequence(similarity, batch_first=True, padding_value=0)
+    similarity_padded = pad_sequence(similarity, batch_first=True, padding_value=0).to(torch.float32)
 
     return features_padded, labels_padded, similarity_padded, lengths, target_speaker_ids
+
+
+def len_fn(item):
+    return item[0].size(-1)
 
 
 def build_libriconcat_datapipe(data_sets, feature_extractor, waveforms_dir: str = "Waveforms/",
@@ -280,8 +283,6 @@ def build_libriconcat_datapipe(data_sets, feature_extractor, waveforms_dir: str 
             partial(segment_features, segment_size=segment_max_size, min_length=min_length))
         datapipe = datapipe.shuffle(buffer_size=1000)
     if max_token_count:
-        def len_fn(item):
-            return item[0].size(-1)
         datapipe = datapipe.max_token_bucketize(max_token_count=max_token_count, len_fn=len_fn, include_padding=True,
                                                 buffer_size=100, min_len=min_length)
     else:

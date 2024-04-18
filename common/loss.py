@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import torch
 from torch import nn
@@ -66,7 +66,7 @@ class WeightedPairwiseLoss(nn.Module):
         return torch.mean(weighted_pairwise_loss)
 
 
-def get_loss(name: str, weights: Optional[list[float, float, float]] = None, ignore_index=-1):
+def get_loss(name: str, weights=None, ignore_index=-1):
     if name == "weighted_pairwise":
         return WeightedPairwiseLoss(weights=weights, ignore_index=ignore_index)
     elif name == "cross_entropy":

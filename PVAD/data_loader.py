@@ -1,16 +1,14 @@
-import random
 from functools import partial
 from io import BytesIO
 from pathlib import Path
-from typing import Callable, Optional, Tuple, Union
+from typing import Callable
 
 import numpy as np
 import pandas as pd
 import torch
 import torchaudio
-from torch import Tensor
 from torch.nn.utils.rnn import pad_sequence
-from torch.utils.data import ConcatDataset, DataLoader, Dataset
+from torch.utils.data import DataLoader
 from torchdata import datapipes as dp
 
 from common.misc import count_files
@@ -167,6 +165,10 @@ def pad_collate_features(batch):
     return features_padded, lengths
 
 
+def len_fn(item):
+    return item[0].size(-1)
+
+
 def build_libriconcat_datapipe(data_sets, feature_extractor, waveforms_dir: str = "Waveforms/",
                                metadata_filename: str = "metadata.csv", embeddings_dir: str = "SpeakerEmbeddings/",
                                embeddings_filename: str = "speaker_embeddings.pt", features_only: bool = False,
@@ -238,19 +240,11 @@ def build_libriconcat_datapipe(data_sets, feature_extractor, waveforms_dir: str 
     datapipe = datapipe.map(partial(load_speaker_embedding,
                                     metadata=metadata,
                                     speaker_embeddings=speaker_embeddings))
-    #
-    #
-    #
-    # datapipe = datapipe.map(
-    #     partial(load_item, metadata=metadata, speaker_embeddings=speaker_embeddings, augmentor=augmentor,
-    #             feature_extractor=feature_extractor, features_only=features_only))
     if segment_max_size:
         datapipe = datapipe.flatmap(
             partial(segment_features, segment_size=segment_max_size, min_length=min_length))
         datapipe = datapipe.shuffle(buffer_size=1000)
     if max_token_count:
-        def len_fn(item):
-            return item[0].size(-1)
         datapipe = datapipe.max_token_bucketize(max_token_count=max_token_count, len_fn=len_fn, include_padding=True,
                                                 buffer_size=100, min_len=min_length)
     else:

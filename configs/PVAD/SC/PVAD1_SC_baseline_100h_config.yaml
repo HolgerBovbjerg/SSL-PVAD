@@ -15,34 +15,33 @@ exp:
 data:
     train_data:
         LibriSpeechConcat:
-            root: /users/bovbjerg/Data/LibriSpeechConcat/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - train-clean-100
     validation_data:
         LibriSpeechConcat:
-            root: /users/bovbjerg/Data/LibriSpeechConcat/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - dev-clean
     test_data:
         LibriSpeechConcat:
-            root: /users/bovbjerg/Data/LibriSpeechConcat/
+            root: ./data/LibriSpeechConcat/
             splits:
                 - test-clean
     waveforms_dir: Waveforms/
     embeddings_dir: SpeakerEmbeddings/
     buffer_size: 10000
-    load_from_tar: True
+    load_from_tar: False
     load_from: raw
     segment_max_size: 0
-    max_token_count: 60000
-    min_length: 100
+    max_token_count: 0
+    min_length: 0
     p_enrollment_free: 0.0
     p_target_free: 0.0
     labels:
         ns: 0
         tss: 1
         ntss: 2
-    use_waveforms: True
 hparams:
     seed: 0
     batch_size: 64
@@ -54,7 +53,7 @@ hparams:
         window_length: 400
         hop_length: 160
         stacked_consecutive_features: 1
-        subsample_factor: 1
+        stacked_features_stride: 1
     model:
         encoder:
             name: PVAD1_SC

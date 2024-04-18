@@ -7,8 +7,8 @@ from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from APC import APC
 from common.misc import log, save_model
+from APC import APC
 
 
 def train_single_batch(model: nn.Module, features: torch.Tensor, lengths: torch.Tensor,

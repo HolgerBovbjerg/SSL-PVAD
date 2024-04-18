@@ -3,11 +3,12 @@ from typing import Optional, Union
 
 import numpy as np
 import torch
-import wandb
 from scipy.interpolate import interp1d
 from scipy.optimize import brentq
 from sklearn.metrics import ConfusionMatrixDisplay, roc_curve
 from tqdm import tqdm
+
+import wandb
 
 
 def wandb_log_confusion_matrix(counts: np.ndarray, class_names, title: str = ""):

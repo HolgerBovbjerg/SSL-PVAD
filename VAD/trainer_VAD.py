@@ -1,17 +1,16 @@
 import os
-import random
 import time
 from typing import Callable
 
 import numpy as np
 import torch
-import wandb
-from sklearn.metrics import (accuracy_score, average_precision_score,
-                             confusion_matrix, roc_auc_score)
+from sklearn.metrics import (average_precision_score, confusion_matrix,
+                             roc_auc_score)
 from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+import wandb
 from common.metrics import wandb_log_confusion_matrix
 from common.misc import (count_parameters, log, save_model,
                          unfreeze_model_parameters)

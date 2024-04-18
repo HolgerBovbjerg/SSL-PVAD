@@ -23,7 +23,7 @@ class PVAD1_SC(nn.Module):
         self.out_dim = out_dim
 
         # define the model layers
-        self.lstm = nn.LSTM(input_dim, hidden_dim, num_layers, batch_first=True)
+        self.encoder = nn.LSTM(input_dim, hidden_dim, num_layers, batch_first=True)
         self.fc = nn.Linear(hidden_dim, out_dim)
 
         # similarity score scaling parameters
@@ -33,7 +33,7 @@ class PVAD1_SC(nn.Module):
     def forward(self, x, similarity_scores, x_lens, hidden=None, output_hidden=None):
         """Personal VAD model forward pass method."""
         x_packed = pack_padded_sequence(x, x_lens.cpu(), batch_first=True, enforce_sorted=False)
-        out_packed, hidden = self.lstm(x_packed, hidden)
+        out_packed, hidden = self.encoder(x_packed, hidden)
         out_padded, _ = pad_packed_sequence(out_packed, batch_first=True)
 
         out_padded = self.fc(out_padded)
