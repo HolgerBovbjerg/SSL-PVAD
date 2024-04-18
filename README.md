@@ -19,6 +19,9 @@ python data_preprocessing/prepare_data_librispeech_concat.py
 
 Here, you will need to update the configuration file with your data paths.
 
+The script automatically downloads the LibriSpeech data used to generate the multi-speaker utterances, 
+so make sure you have enough disk space before you run it.
+
 ## Running experiments
 To run the experiments, simply run 
 ```

@@ -30,10 +30,10 @@ def load_pretrained_model(model: torch.nn.Module, checkpoint_path: str = "", map
     model_state_dict = model.state_dict()
     checkpoint_model_state_dict = checkpoint["model_state_dict"]
     if "lstm.weight_ih_l0" in checkpoint_model_state_dict:
-        checkpoint_model_state_dict = {key.replace("lstm.", ""): value for key, value in checkpoint_model_state_dict.items()}
+        checkpoint_model_state_dict = {key.replace("lstm.", "encoder."): value for key, value in checkpoint_model_state_dict.items()}
 
-    print(model_state_dict.keys())
-    print(checkpoint_model_state_dict.keys())
+    # print(model_state_dict.keys())
+    # print(checkpoint_model_state_dict.keys())
     model_state_dict.update(checkpoint_model_state_dict)
     model.load_state_dict(model_state_dict)
     print(f"Loaded checkpoint {checkpoint_path}.")
