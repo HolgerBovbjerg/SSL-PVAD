@@ -1,0 +1,95 @@
+data:
+  alignments_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech-Alignments/
+  concat_waveforms_dir: Waveforms/
+  data_root: /home/es.aau.dk/jg96xg/Data/LibriSpeechConcat/
+  embeddings_dir: SpeakerEmbeddings/
+  features_dir: Features/
+  labels:
+    ns: 0
+    ntss: 2
+    tss: 1
+  librispeech_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech/
+  name: librispeech_concat
+  p_enrollment_free: 0.0
+  p_target_free: 0.0
+  test_splits:
+  - test-clean
+  train_splits:
+  - train-clean-100
+  use_waveforms: true
+  validation_splits:
+  - dev-clean
+exp:
+  device: !!python/object/apply:torch.device
+  - cuda
+  exp_dir: ./runs
+  exp_name: PVAD1_SC_APC_finetune_100h_97669
+  group_name: PVAD1_SC_APC_finetune_100h
+  log_freq: 20
+  log_to_file: true
+  log_to_stdout: false
+  n_workers: 16
+  pin_memory: true
+  proj_name: PVAD_SSL
+  save_dir: ./runs/PVAD1_SC_APC_finetune_100h_97669
+  val_freq: 1
+  wandb: true
+  wandb_api_key: null
+hparams:
+  audio:
+    hop_length: 160
+    n_fft: 400
+    n_mels: 40
+    sample_rate: 16000
+    stacked_consecutive_features: 1
+    subsample_factor: 1
+    window_length: 400
+  augment:
+    preprocessing: null
+    training: null
+  batch_sampler:
+    batch_sampler_kwargs:
+      num_buckets: 10
+    dynamic: true
+    name: bucket
+  batch_size: 2700
+  loss:
+    type: cross_entropy
+    weights:
+      ns_ntss: 0.1
+      tss_ns: 1
+      tss_ntss: 1
+  metrics:
+    average: weighted
+    name:
+    - averageprecision
+    - accuracy
+    - auroc
+    num_classes: 3
+  model:
+    checkpoint:
+      checkpoint_path: runs/PVAD1_SC_APC_pretrain/best_encoder.pth
+      freeze: false
+    encoder:
+      name: PVAD1_SC
+      settings:
+        hidden_dim: 64
+        input_dim: 40
+        num_layers: 2
+        out_dim: 2
+  n_epochs: 10
+  optimizer:
+    opt_kwargs:
+      betas: !!python/tuple
+      - 0.9
+      - 0.999
+      eps: 1.0e-08
+      lr: 5.0e-05
+      weight_decay: 0.0
+    opt_type: Adam
+  scheduler:
+    n_warmup: 0
+    scheduler_kwargs:
+      eta_min: 1.0e-08
+    scheduler_type: cosine_annealing
+  seed: 0

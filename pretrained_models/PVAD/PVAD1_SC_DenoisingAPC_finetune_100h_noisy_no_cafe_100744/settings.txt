@@ -1,0 +1,98 @@
+data:
+  alignments_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech-Alignments/
+  concat_waveforms_dir: Waveforms/
+  data_root: /home/es.aau.dk/jg96xg/Data/LibriSpeechConcat/
+  embeddings_dir: SpeakerEmbeddings/
+  features_dir: Features/
+  labels:
+    ns: 0
+    ntss: 2
+    tss: 1
+  librispeech_root: /home/es.aau.dk/jg96xg/Data/LibriSpeech/
+  name: librispeech_concat
+  p_enrollment_free: 0.0
+  p_target_free: 0.0
+  test_splits:
+  - test-clean
+  train_splits:
+  - train-clean-100
+  use_waveforms: true
+  validation_splits:
+  - dev-clean
+exp:
+  device: !!python/object/apply:torch.device
+  - cuda
+  exp_dir: ./runs
+  exp_name: PVAD1_SC_DenoisingAPC_finetune_100h_noisy_no_cafe_100744
+  group_name: PVAD1_SC_DenoisingAPC_finetune_100h_noisy_no_cafe
+  log_freq: 20
+  log_to_file: true
+  log_to_stdout: false
+  n_workers: 16
+  pin_memory: true
+  proj_name: PVAD_SSL
+  save_dir: ./runs/PVAD1_SC_DenoisingAPC_finetune_100h_noisy_no_cafe_100744
+  val_freq: 1
+  wandb: true
+  wandb_api_key: null
+hparams:
+  audio:
+    hop_length: 160
+    n_fft: 400
+    n_mels: 40
+    sample_rate: 16000
+    stacked_consecutive_features: 1
+    subsample_factor: 1
+    window_length: 400
+  augment:
+    spectrogram: null
+    waveform:
+      noise:
+        noise_paths:
+        - /home/es.aau.dk/jg96xg/Data/kolbaek_noise_files/bbl/
+        - /home/es.aau.dk/jg96xg/Data/kolbaek_noise_files/bus/
+        - /home/es.aau.dk/jg96xg/Data/kolbaek_noise_files/ped/
+        - /home/es.aau.dk/jg96xg/Data/kolbaek_noise_files/ssn/
+        - /home/es.aau.dk/jg96xg/Data/kolbaek_noise_files/str/
+        p: 0.5
+        snr_db_max: 20
+        snr_db_min: -5
+      rir:
+        p: 0.5
+        rir_paths:
+        - /home/es.aau.dk/jg96xg/Data/RIRS_NOISES/real_rirs_isotropic_noises/
+  batch_size: 64
+  loss:
+    accumulation_steps: 1
+    type: cross_entropy
+    weights:
+      ns_ntss: 0.1
+      tss_ns: 1
+      tss_ntss: 1
+  model:
+    checkpoint:
+      checkpoint_path: models/pretrained/PVAD_SC_DenosingAPC_pretrain_960h_noisy_no_cafe_10_epoch/PVAD1_SC_DenoisingAPC_pretrain_960h_noisy_no_cafe_100684/best_encoder.pth
+      freeze: false
+    encoder:
+      name: PVAD1_SC
+      settings:
+        hidden_dim: 64
+        input_dim: 40
+        num_layers: 2
+        out_dim: 2
+  n_epochs: 10
+  optimizer:
+    opt_kwargs:
+      betas: !!python/tuple
+      - 0.9
+      - 0.999
+      eps: 1.0e-08
+      lr: 5.0e-05
+      weight_decay: 0.0
+    opt_type: Adam
+  scheduler:
+    n_warmup: 0
+    scheduler_kwargs:
+      eta_min: 1.0e-08
+    scheduler_type: cosine_annealing
+  seed: 0
